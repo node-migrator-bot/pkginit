@@ -1,0 +1,44 @@
+{
+    "name" : "pkginit",
+    "version" : "0.0.0",
+    "description" : "script building package.json files, like `npm init`",
+    "main" : "index.js",
+    "bin" : {
+        "pkginit": "bin/cmd.js"
+    },
+    "directories" : {
+        "example" : "example",
+        "test" : "test"
+    },
+    "dependencies" : {
+        "optimist" : "~0.3.4",
+        "merge" : "~1.0.0",
+        "prompter" : "~0.0.4",
+        "mkdirp" : "~0.3.3",
+        "editor" : "~0.0.0"
+    },
+    "devDependencies" : {
+        "tap" : "~0.2.5"
+    },
+    "scripts" : {
+        "test" : "tap test/*.js"
+    },
+    "repository" : {
+        "type" : "git",
+        "url" : "git://github.com/substack/pkginit.git"
+    },
+    "homepage" : "https://github.com/substack/pkginit",
+    "keywords" : [
+        "npm",
+        "init",
+        "package",
+        "json"
+    ],
+    "author" : {
+        "name" : "James Halliday",
+        "email" : "mail@substack.net",
+        "url" : "http://substack.net"
+    },
+    "license" : "MIT",
+    "engine" : { "node" : ">=0.6" }
+}

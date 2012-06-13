@@ -1,8 +1,7 @@
 pkginit
 =======
 
-Create a package.json file like `npm init` but with more control over package
-defaults.
+Script building package.json files, like `npm init`.
 
 example
 =======
