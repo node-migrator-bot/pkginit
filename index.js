@@ -78,24 +78,23 @@ PkgInit.prototype.list = function (cb) {
 };
 
 PkgInit.prototype.edit = function (name, opts, cb) {
+    if (typeof opts === 'function') {
+        cb = opts;
+        opts = {};
+    }
     if (!opts) opts = {};
     
     var editor = opts.editor || process.env.EDITOR || 'vim';
     var file = this.filename(name);
     
-    var opts = {
-        customFds : [ 0, 1, 2 ],
-        env : process.env,
-        cwd : process.cwd()
-    };
     setRaw(true);
-    var ps = spawn(editor, [ file ], opts);
+    var ps = spawn(editor, [ file ], { customFds : [ 0, 1, 2 ] });
     process.stdin.pipe(ps);
     
-    ps.on('exit', function () {
+    ps.on('exit', function (code, sig) {
         setRaw(false);
         process.stdin.pause();
-        if (cb) cb()
+        if (typeof cb === 'function') cb(code, sig)
     });
 };
 

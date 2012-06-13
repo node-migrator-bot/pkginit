@@ -1,0 +1,23 @@
+usage:
+
+  pkginit add [name] [file]
+    
+    Store the file at [file] with the name [name].
+  
+  pkginit rm [name]
+  
+    Remove the file [name] from the registry.
+  
+  pkginit list
+  
+    List the files in the registry.
+  
+  pkginit edit [name]
+  
+    Edit the file at [name] with $EDITOR.
+  
+  pkginit build [name]
+  pkginit [name]
+  
+    Generate a package with the file at [name].
+

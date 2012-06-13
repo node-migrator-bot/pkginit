@@ -1,8 +1,13 @@
+#!/usr/bin/env node
 var pkginit = require('../');
 var fs = require('fs');
 
 var argv = require('optimist').argv;
 var cmd = argv._[0];
+if (cmd === 'help' || argv.h || argv.help) {
+    fs.createReadStream(__dirname + '/usage.txt').pipe(process.stdout);
+    return;
+}
 
 pkginit({ context : argv }, function (err, pkg) {
     if (err) return console.error(err);
