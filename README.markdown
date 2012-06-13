@@ -61,7 +61,7 @@ install
 With [npm](http://npmjs.org) do:
 
 ```
-npm install pkginit
+npm install -g pkginit
 ```
 
 license
