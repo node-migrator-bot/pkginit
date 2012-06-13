@@ -3,7 +3,7 @@ var prompter = require('prompter');
 var merge = require('merge');
 var spawn = require('child_process').spawn;
 var exec = require('child_process').exec;
-var edit = require('editor');
+var editor = require('editor');
 
 var fs = require('fs');
 var path = require('path');
@@ -21,7 +21,8 @@ exports = module.exports = function (opts, cb) {
                 return require(path.resolve(opts.configDir, name))
             }
             else return require(name)
-        }
+        },
+        console : console,
     }, opts.context || {});
     
     mkdirp(opts.configDir, function (err) {
@@ -86,7 +87,7 @@ PkgInit.prototype.edit = function (name, opts, cb) {
     if (!opts) opts = {};
     
     var file = this.filename(name);
-    edit(file, opts, function (code, sig) {
+    editor(file, opts, function (code, sig) {
         if (typeof cb === 'function') cb(code, sig)
     });
 };
