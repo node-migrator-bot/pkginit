@@ -1,6 +1,7 @@
 var pkginit = require('../');
-var argv = require('optimist').argv;
 var fs = require('fs');
+
+var argv = require('optimist').argv;
 var cmd = argv._[0];
 
 pkginit({ context : argv }, function (err, pkg) {
@@ -29,6 +30,14 @@ pkginit({ context : argv }, function (err, pkg) {
             if (files && files.length) {
                 console.log(files.join('\r\n'));
             }
+        });
+    }
+    else if (cmd === 'edit') {
+        var opts = {
+            editor : argv.editor || process.env.EDITOR || 'vim'
+        };
+        pkg.edit(argv._[1] || 'default', opts, function (err) {
+            if (err) console.error(err);
         });
     }
     else {

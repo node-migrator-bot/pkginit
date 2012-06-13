@@ -1,6 +1,8 @@
 var mkdirp = require('mkdirp');
 var prompter = require('prompter');
 var merge = require('merge');
+var spawn = require('child_process').spawn;
+var exec = require('child_process').exec;
 
 var fs = require('fs');
 var path = require('path');
@@ -33,13 +35,17 @@ function PkgInit (opts) {
     this.context = opts.context;
 }
 
+PkgInit.prototype.filename = function (name, cb) {
+    return path.join(this.configDir, name + '.json');
+};
+
 PkgInit.prototype.build = function (name, cb) {
     var self = this;
     var opts = self.opts;
     var stderr = opts.stderr || process.stderr;
     var stdout = opts.stdout || process.stdout;
     var stdin = opts.stdin || process.stdin;
-    var file = path.join(self.configDir, name + '.json');
+    var file = self.filename(name);
     
     fs.readFile(file, function (err, src) {
         if (err) return cb(err);
@@ -54,13 +60,11 @@ PkgInit.prototype.build = function (name, cb) {
 };
 
 PkgInit.prototype.add = function (name, src, cb) {
-    var file = path.join(this.configDir, name + '.json');
-    fs.writeFile(file, src, cb);
+    fs.writeFile(this.filename(name), src, cb);
 };
 
 PkgInit.prototype.rm = function (name, cb) {
-    var file = path.join(this.configDir, name + '.json');
-    fs.unlink(file, cb);
+    fs.unlink(this.filename(name), cb);
 };
 
 PkgInit.prototype.list = function (cb) {
@@ -68,7 +72,34 @@ PkgInit.prototype.list = function (cb) {
         if (err) cb(err)
         else cb(null, files
             .filter(function (x) { return /\.json$/.test(x) })
-            .map(function (x) { return /\.json$/.replace('') })
+            .map(function (x) { return x.replace(/\.json$/, '') })
         )
     });
 };
+
+PkgInit.prototype.edit = function (name, opts, cb) {
+    if (!opts) opts = {};
+    
+    var editor = opts.editor || process.env.EDITOR || 'vim';
+    var file = this.filename(name);
+    
+    var opts = {
+        customFds : [ 0, 1, 2 ],
+        env : process.env,
+        cwd : process.cwd()
+    };
+    setRaw(true);
+    var ps = spawn(editor, [ file ], opts);
+    process.stdin.pipe(ps);
+    
+    ps.on('exit', function () {
+        setRaw(false);
+        process.stdin.pause();
+        if (cb) cb()
+    });
+};
+
+var tty = require('tty');
+function setRaw (mode) {
+    (process.stdin.setRawMode || tty.setRawMode)(mode);
+}
