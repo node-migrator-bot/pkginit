@@ -12,13 +12,13 @@ to serve as the basis for whenever you type `pkginit`:
 
 ``` js
 {
-  "name": dirname,
-  "description": prompt('Description'),
+  "name": basename.replace(/^node-/, ''),
+  "description": prompt(),
   "version": "0.0.0",
   "repository": {
-    "url": "git://github.com/substack/" + dirname + ".git"
+    "url": "git://github.com/substack/" + basename + ".git"
   },
-  "main": prompt('Entry point', 'index.js'),
+  "main": prompt('entry point', 'index.js'),
   "scripts": {
     "test": "tap test/*.js"
   },
@@ -43,8 +43,6 @@ $ mkdir beep-boop; cd beep-boop
 $ pkginit
 description: make beep and boop sounds
 entry point: (index.js)
-
-wrote file /home/substack/projects/beep-boop/package.json
 ```
 
 variables
@@ -54,5 +52,19 @@ In packages, these variables are availble:
 
 * basename - shorthand for `path.basename(process.cwd())`
 * process - node's `process`
-* require - node's `require`
+* require - node's `require`, rebased to `process.cwd()`
 * env - shorthand for `process.env`
+
+install
+=======
+
+With [npm](http://npmjs.org) do:
+
+```
+npm install pkginit
+```
+
+license
+=======
+
+MIT
