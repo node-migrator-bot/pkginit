@@ -3,6 +3,7 @@ var prompter = require('prompter');
 var merge = require('merge');
 var spawn = require('child_process').spawn;
 var exec = require('child_process').exec;
+var edit = require('editor');
 
 var fs = require('fs');
 var path = require('path');
@@ -84,16 +85,8 @@ PkgInit.prototype.edit = function (name, opts, cb) {
     }
     if (!opts) opts = {};
     
-    var editor = opts.editor || process.env.EDITOR || 'vim';
     var file = this.filename(name);
-    
-    setRaw(true);
-    var ps = spawn(editor, [ file ], { customFds : [ 0, 1, 2 ] });
-    process.stdin.pipe(ps);
-    
-    ps.on('exit', function (code, sig) {
-        setRaw(false);
-        process.stdin.pause();
+    edit(file, opts, function (code, sig) {
         if (typeof cb === 'function') cb(code, sig)
     });
 };
