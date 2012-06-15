@@ -53,6 +53,19 @@
         "email" : "mail@substack.net",
         "url" : "http://substack.net"
     },
-    "license" : "MIT",
+    "license" : function (cb) {
+        var fs = require('fs'), path = require('path');
+        var exists = fs.exists || path.exists;
+        var file = process.cwd() + '/LICENSE';
+        exists(file, function (ex) {
+            if (ex) return;
+            fs.writeFile(file, [
+                'This software is released under the MIT license:',
+                'http://www.opensource.org/licenses/mit-license.php',
+                ''
+            ].join('\n'));
+        });
+        cb(null, 'MIT')
+    },
     "engine" : { "node" : ">=0.6" }
 }
