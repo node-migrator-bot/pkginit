@@ -61,7 +61,7 @@
         var file = process.cwd() + '/LICENSE';
         
         exists(file, function (ex) {
-            if (ex) return;
+            if (ex) return cb(null, 'MIT');
             fs.readFile(licenseFile, function (err, src) {
                 if (err) return cb(err);
                 fs.writeFile(file, src);
