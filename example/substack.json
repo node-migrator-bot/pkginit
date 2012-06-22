@@ -56,16 +56,18 @@
     "license" : function (cb) {
         var fs = require('fs'), path = require('path');
         var exists = fs.exists || path.exists;
+        
+        var licenseFile = process.env.HOME + '/doc/license/mit';
         var file = process.cwd() + '/LICENSE';
+        
         exists(file, function (ex) {
             if (ex) return;
-            fs.writeFile(file, [
-                'This software is released under the MIT license:',
-                'http://www.opensource.org/licenses/mit-license.php',
-                ''
-            ].join('\n'));
+            fs.readFile(licenseFile, function (err, src) {
+                if (err) return cb(err);
+                fs.writeFile(file, src);
+                cb(null, 'MIT');
+            });
         });
-        cb(null, 'MIT')
     },
     "engine" : { "node" : ">=0.6" }
 }
