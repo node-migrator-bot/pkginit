@@ -94,5 +94,5 @@ PkgInit.prototype.edit = function (name, opts, cb) {
 
 var tty = require('tty');
 function setRaw (mode) {
-    (process.stdin.setRawMode || tty.setRawMode)(mode);
+    (process.stdin.setRawMode || process.stdin.setRawMode)(mode);
 }
